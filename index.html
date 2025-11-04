@@ -3,39 +3,63 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Web Osin</title>
+<title>Mini Web Keren Pemula</title>
+<style>
+  body { font-family: Arial; text-align: center; margin-top: 50px; }
+  input { width: 100px; padding: 5px; margin: 5px; }
+  button { padding: 10px 20px; margin: 10px; cursor: pointer; transition: 0.3s; }
+  button:hover { background-color: orange; color: white; transform: scale(1.1); }
+  #hasil { margin-top: 20px; font-size: 1.2em; color: green; }
+</style>
 </head>
 <body>
-<h2>Jalankan Osin dari Web</h2>
-<input type="text" id="target" placeholder="Masukkan target">
-<button onclick="runOsin()">Jalankan</button>
 
-<pre id="output"></pre>
+<h2>Mini Web Keren Pemula</h2>
+
+<p>Tambah Dua Angka</p>
+<input type="number" id="angka1" placeholder="Angka 1">
+<input type="number" id="angka2" placeholder="Angka 2">
+<button onclick="kirim()">Hitung</button>
+
+<pre id="hasil"></pre>
+
+<hr>
+<p>Tombol Animasi Tanpa Python</p>
+<button id="btnAnim">Klik Aku!</button>
+<p id="animOutput"></p>
 
 <script>
-async function runOsin() {
-    const target = document.getElementById('target').value;
-    const outputEl = document.getElementById('output');
+// Fungsi hitung pakai Python backend
+async function kirim() {
+    const a = document.getElementById('angka1').value;
+    const b = document.getElementById('angka2').value;
+    const hasilEl = document.getElementById('hasil');
 
-    if (!target) {
-        alert("Isi target dulu!");
-        return;
-    }
+    if(!a || !b) { alert("Isi kedua angka dulu!"); return; }
 
-    outputEl.textContent = "Menjalankan Osin...";
+    hasilEl.textContent = "Menghitung...";
 
     try {
-        const res = await fetch('/run', {
-            method: 'POST',
-            headers: {'Content-Type':'application/json'},
-            body: JSON.stringify({target})
+        const res = await fetch('/hitung', {
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({a,b})
         });
         const data = await res.json();
-        outputEl.textContent = data.error ? "Error: "+data.error : data.result;
+        hasilEl.textContent = data.error ? "Error: "+data.error : "Hasil: "+data.hasil;
     } catch(err) {
-        outputEl.textContent = "Fetch error: " + err;
+        hasilEl.textContent = "Fetch error: " + err;
     }
 }
+
+// Animasi tombol tanpa Python
+document.getElementById('btnAnim').onclick = () => {
+    const animEl = document.getElementById('animOutput');
+    animEl.textContent = "Keren kan? 😎✨";
+    document.getElementById('btnAnim').style.background = "purple";
+    document.getElementById('btnAnim').style.color = "white";
+}
 </script>
+
 </body>
 </html>
