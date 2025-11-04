@@ -1,26 +1,21 @@
 from flask import Flask, request, jsonify
-import subprocess
 
 app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return open("index.html").read()  # Tampilkan frontend
+    return open("index.html").read()
 
-@app.route('/run', methods=['POST'])
-def run_osin():
+@app.route('/hitung', methods=['POST'])
+def hitung():
     data = request.json
-    target = data.get('target')
-
-    if not target:
-        return jsonify({"error":"Target kosong"}), 400
-
     try:
-        # Jalankan Osin asli
-        result = subprocess.getoutput(f'python3 osin.py {target}')
-        return jsonify({"result": result})
+        a = int(data.get("a",0))
+        b = int(data.get("b",0))
+        hasil = a + b
+        return jsonify({"hasil": hasil})
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return jsonify({"error": str(e)}), 400
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=3000)
