@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Web Osin</title>
+</head>
+<body>
+<h2>Jalankan Osin dari Web</h2>
+<input type="text" id="target" placeholder="Masukkan target">
+<button onclick="runOsin()">Jalankan</button>
+
+<pre id="output"></pre>
+
+<script>
+async function runOsin() {
+    const target = document.getElementById('target').value;
+    const outputEl = document.getElementById('output');
+
+    if (!target) {
+        alert("Isi target dulu!");
+        return;
+    }
+
+    outputEl.textContent = "Menjalankan Osin...";
+
+    try {
+        const res = await fetch('/run', {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({target})
+        });
+        const data = await res.json();
+        outputEl.textContent = data.error ? "Error: "+data.error : data.result;
+    } catch(err) {
+        outputEl.textContent = "Fetch error: " + err;
+    }
+}
+</script>
+</body>
+</html>
